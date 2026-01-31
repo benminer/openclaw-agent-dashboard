@@ -1,0 +1,13 @@
+.nvmrc
+biome.json
+.github/**
+.bolt/**
+.zed/**
+CLAUDE.md
+README.md
+tsconfig.app.tsbuildinfo
+tsconfig.node.tsbuildinfo
+.conductor/**
+docs/**
+shopify.app.toml
+.env
