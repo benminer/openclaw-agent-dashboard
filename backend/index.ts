@@ -1,8 +1,8 @@
 import { http } from '@ampt/sdk'
 import express from 'express'
 import morgan from 'morgan'
-import { authMiddleware } from '@/middleware/auth'
-import backupRoutes from '@/routes/backup'
+import { authMiddleware, sameOriginOrAuth } from '@/middleware/auth'
+import { readRoutes, writeRoutes } from '@/routes/backup'
 
 const app = express()
 
@@ -13,8 +13,10 @@ app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
 })
 
-// Auth for all other /api routes
-app.use('/api', authMiddleware)
-app.use('/api', backupRoutes)
+// Read routes -- same-origin (frontend) or API key
+app.use('/api', sameOriginOrAuth, readRoutes)
+
+// Write routes -- always require API key
+app.use('/api', authMiddleware, writeRoutes)
 
 http.node.use(app)

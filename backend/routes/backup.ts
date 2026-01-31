@@ -1,32 +1,12 @@
 import { storage } from '@ampt/sdk'
 import { Router } from 'express'
 
-const router = Router()
 const backups = storage('backups')
 
-// POST /api/backup - get a presigned upload URL
-router.post('/backup', async (req, res) => {
-  const label = (req.query.label as string) || 'default'
-  const fileCount = req.query.fileCount ? Number(req.query.fileCount) : 0
-  const totalSize = req.query.totalSize ? Number(req.query.totalSize) : 0
-  const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
-  const key = `/${label}/${timestamp}.tar.gz`
+// Read routes -- accessible via same-origin or API key
+export const readRoutes = Router()
 
-  const uploadUrl = await backups.getUploadUrl(key, {
-    metadata: {
-      label,
-      createdAt: new Date().toISOString(),
-      fileCount: String(fileCount),
-      totalSize: String(totalSize)
-    },
-    type: 'application/gzip'
-  })
-
-  res.json({ id: `${label}/${timestamp}`, key, uploadUrl })
-})
-
-// GET /api/backups - list available backups
-router.get('/backups', async (req, res) => {
+readRoutes.get('/backups', async (req, res) => {
   const label = (req.query.label as string) || undefined
   const prefix = label ? `/${label}` : '/'
 
@@ -57,8 +37,7 @@ router.get('/backups', async (req, res) => {
   res.json({ backups: results })
 })
 
-// GET /api/restore/:label/:timestamp - get presigned download URL
-router.get('/restore/:label/:timestamp', async (req, res) => {
+readRoutes.get('/restore/:label/:timestamp', async (req, res) => {
   const { label, timestamp } = req.params
   const key = `/${label}/${timestamp}.tar.gz`
 
@@ -69,12 +48,33 @@ router.get('/restore/:label/:timestamp', async (req, res) => {
   }
 
   const downloadUrl = await backups.getDownloadUrl(key)
-
   res.json({ id: `${label}/${timestamp}`, key, downloadUrl, size: stat.size, metadata: stat.metadata })
 })
 
-// DELETE /api/backup/:label/:timestamp - delete a backup
-router.delete('/backup/:label/:timestamp', async (req, res) => {
+// Write routes -- always require API key
+export const writeRoutes = Router()
+
+writeRoutes.post('/backup', async (req, res) => {
+  const label = (req.query.label as string) || 'default'
+  const fileCount = req.query.fileCount ? Number(req.query.fileCount) : 0
+  const totalSize = req.query.totalSize ? Number(req.query.totalSize) : 0
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
+  const key = `/${label}/${timestamp}.tar.gz`
+
+  const uploadUrl = await backups.getUploadUrl(key, {
+    metadata: {
+      label,
+      createdAt: new Date().toISOString(),
+      fileCount: String(fileCount),
+      totalSize: String(totalSize)
+    },
+    type: 'application/gzip'
+  })
+
+  res.json({ id: `${label}/${timestamp}`, key, uploadUrl })
+})
+
+writeRoutes.delete('/backup/:label/:timestamp', async (req, res) => {
   const { label, timestamp } = req.params
   const key = `/${label}/${timestamp}.tar.gz`
 
@@ -87,5 +87,3 @@ router.delete('/backup/:label/:timestamp', async (req, res) => {
   await backups.remove(key)
   res.json({ deleted: true, id: `${label}/${timestamp}` })
 })
-
-export default router
