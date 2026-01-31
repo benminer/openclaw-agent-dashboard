@@ -35,22 +35,22 @@ router.get('/backups', async (req, res) => {
 
   for await (const items of pages) {
     for (const item of items) {
-    if (!item.endsWith('.tar.gz')) continue
-    const stat = await backups.stat(item)
-    if (!stat) continue
+      if (!item.endsWith('.tar.gz')) continue
+      const stat = await backups.stat(item)
+      if (!stat) continue
 
-    const parts = item
-      .replace(/^\//, '')
-      .replace(/\.tar\.gz$/, '')
-      .split('/')
-    results.push({
-      id: parts.join('/'),
-      key: item,
-      label: parts[0],
-      size: stat.size,
-      lastModified: stat.lastModified,
-      metadata: stat.metadata
-    })
+      const parts = item
+        .replace(/^\//, '')
+        .replace(/\.tar\.gz$/, '')
+        .split('/')
+      results.push({
+        id: parts.join('/'),
+        key: item,
+        label: parts[0],
+        size: stat.size,
+        lastModified: stat.lastModified,
+        metadata: stat.metadata
+      })
     }
   }
 

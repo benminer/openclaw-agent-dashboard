@@ -19,12 +19,18 @@
     "npm": ">=10.0.0"
   },
   "scripts": {
-    "lint": "biome check backend",
-    "lint:fix": "biome check --fix backend",
+    "ampt:dev": "PORT=5173 && vite",
+    "build": "vite build",
+    "ampt:build": "vite build",
+    "lint": "biome check backend src",
+    "lint:fix": "biome check --fix backend src",
     "prepare": "husky"
   },
   "lint-staged": {
     "backend/**/*.{ts,js}": [
+      "biome check --fix --files-ignore-unknown=true --no-errors-on-unmatched"
+    ],
+    "src/**/*.{ts,tsx,js,jsx,css}": [
       "biome check --fix --files-ignore-unknown=true --no-errors-on-unmatched"
     ]
   },
@@ -32,15 +38,25 @@
     "@ampt/sdk": "file:ampt-sdk-1.0.20.tgz",
     "express": "^5.2.1",
     "morgan": "^1.10.1",
-    "pino": "^10.1.1"
+    "pino": "^10.1.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.0.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.11",
     "@types/express": "^5.0.6",
     "@types/morgan": "^1.9.10",
     "@types/node": "^24.3.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "autoprefixer": "^10.4.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
-    "typescript": "^5.5.3"
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.5.3",
+    "vite": "^6.0.0"
   }
 }
