@@ -3,6 +3,21 @@
   "version": "1.0.0",
   "description": "Backup and restore OpenClaw agent workspace files via REST API",
   "type": "module",
+  "main": "backend/index.ts",
+  "ampt": {
+    "org": "benminer",
+    "app": "openclaw-backup-service",
+    "buildRuntime": "nodejs22",
+    "runtime": "nodejs22",
+    "scripts": "backend/scripts"
+  },
+  "files": [
+    "!src/**/*"
+  ],
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
+  },
   "scripts": {
     "lint": "biome check backend",
     "lint:fix": "biome check --fix backend",
