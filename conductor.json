@@ -1,0 +1,6 @@
+{
+  "org": "benminer",
+  "app": "openclaw-backup-service",
+  "buildRuntime": "nodejs22",
+  "runtime": "nodejs22"
+}

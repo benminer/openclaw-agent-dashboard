@@ -1,0 +1,31 @@
+{
+  "name": "openclaw-backup-service",
+  "version": "1.0.0",
+  "description": "Backup and restore OpenClaw agent workspace files via REST API",
+  "type": "module",
+  "scripts": {
+    "lint": "biome check backend",
+    "lint:fix": "biome check --fix backend",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "backend/**/*.{ts,js}": [
+      "biome check --fix --files-ignore-unknown=true --no-errors-on-unmatched"
+    ]
+  },
+  "dependencies": {
+    "@ampt/sdk": "file:ampt-sdk-1.0.20.tgz",
+    "express": "^5.2.1",
+    "morgan": "^1.10.1",
+    "pino": "^10.1.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.11",
+    "@types/express": "^5.0.6",
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^24.3.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "typescript": "^5.5.3"
+  }
+}
