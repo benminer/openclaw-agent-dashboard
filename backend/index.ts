@@ -1,3 +1,4 @@
+import path from 'node:path'
 import { http } from '@ampt/sdk'
 import express from 'express'
 import morgan from 'morgan'
@@ -21,5 +22,11 @@ app.use('/api', sameOriginOrAuth, blogReadRoutes)
 // Write routes -- always require API key
 app.use('/api', authMiddleware, writeRoutes)
 app.use('/api', authMiddleware, blogWriteRoutes)
+
+// SPA fallback -- serve index.html for non-API routes so React Router works
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) return next()
+  res.sendFile(path.resolve('static/index.html'))
+})
 
 http.node.use(app)
