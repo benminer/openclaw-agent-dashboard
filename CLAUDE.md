@@ -136,6 +136,10 @@ import { authMiddleware } from '@/middleware/auth'
 import { backupRouter } from './routes/backup'
 ```
 
+### Dependency Management
+
+Frontend dependencies (React, react-router-dom, react-markdown, etc.) go in `devDependencies`, NOT `dependencies`. Vite bundles them at build time so they don't need to be in the production node_modules. Only backend runtime deps (express, @ampt/sdk, etc.) go in `dependencies`.
+
 ### Import Path Aliases
 
 Backend uses `@/` alias:
