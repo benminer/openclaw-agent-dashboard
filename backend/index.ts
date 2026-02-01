@@ -3,6 +3,7 @@ import express from 'express'
 import morgan from 'morgan'
 import { authMiddleware, sameOriginOrAuth } from '@/middleware/auth'
 import { readRoutes, writeRoutes } from '@/routes/backup'
+import { blogReadRoutes, blogWriteRoutes } from '@/routes/blog'
 
 const app = express()
 
@@ -15,8 +16,10 @@ app.get('/api/health', (_req, res) => {
 
 // Read routes -- same-origin (frontend) or API key
 app.use('/api', sameOriginOrAuth, readRoutes)
+app.use('/api', sameOriginOrAuth, blogReadRoutes)
 
 // Write routes -- always require API key
 app.use('/api', authMiddleware, writeRoutes)
+app.use('/api', authMiddleware, blogWriteRoutes)
 
 http.node.use(app)
