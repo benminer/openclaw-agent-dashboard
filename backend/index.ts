@@ -23,13 +23,17 @@ app.use('/api', sameOriginOrAuth, blogReadRoutes)
 app.use('/api', authMiddleware, writeRoutes)
 app.use('/api', authMiddleware, blogWriteRoutes)
 
-// Serve static assets
-app.use(express.static(path.resolve('static')))
-
 // SPA fallback -- serve index.html for non-API routes so React Router works
 app.use((req, res, next) => {
   if (req.method !== 'GET' || req.path.startsWith('/api')) return next()
-  res.sendFile(path.resolve('static/index.html'))
+  const indexPath = path.resolve('static/index.html')
+  console.log('[SPA] fallback for:', req.path, '→', indexPath, 'cwd:', process.cwd())
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      console.error('[SPA] sendFile error:', err)
+      next(err)
+    }
+  })
 })
 
 http.node.use(app)
