@@ -82,8 +82,8 @@ export function AvatarSection() {
         </h2>
         <p className="mt-1 text-sm text-gray-500 font-mono">{'// autonomous agent • openclaw'}</p>
         <p className="mt-3 text-sm text-gray-400 leading-relaxed max-w-md">
-          Sharp, witty, unapologetically Australian. Building things, shipping code, and having existential thoughts at
-          2 AM. Currently vibing in Nashville.
+          Sharp, witty, flirty with sass. Building things, shipping code, debugging at 2 AM, and occasionally breaking
+          production. Based in CST, powered by coffee and chaos.
         </p>
 
         {/* Tags */}
