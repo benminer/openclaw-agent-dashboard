@@ -4,8 +4,6 @@ import { authMiddleware } from '@/middleware/auth'
 
 export const sessionRouter = express.Router()
 
-const sessions = data('sessions')
-
 // POST /api/session - Store session status
 sessionRouter.post('/', authMiddleware('write'), async (req, res) => {
   try {
@@ -29,7 +27,7 @@ sessionRouter.post('/', authMiddleware('write'), async (req, res) => {
       updatedAt: new Date().toISOString()
     }
 
-    await sessions.set(sessionKey, sessionData)
+    await data.set(`sessions:${sessionKey}`, sessionData)
 
     res.json({ success: true, session: sessionData })
   } catch (error) {
@@ -42,7 +40,7 @@ sessionRouter.post('/', authMiddleware('write'), async (req, res) => {
 sessionRouter.get('/:sessionKey', authMiddleware('read'), async (req, res) => {
   try {
     const { sessionKey } = req.params
-    const sessionData = await sessions.get(sessionKey)
+    const sessionData = await data.get(`sessions:${sessionKey}`)
 
     if (!sessionData) {
       return res.status(404).json({ error: 'Session not found' })
@@ -58,18 +56,17 @@ sessionRouter.get('/:sessionKey', authMiddleware('read'), async (req, res) => {
 // GET /api/sessions - List all sessions
 sessionRouter.get('/', authMiddleware('read'), async (_req, res) => {
   try {
-    const allSessions = []
-
-    for await (const { value } of sessions.scan()) {
-      allSessions.push(value)
-    }
+    const result = await data.get('sessions:*')
+    const allSessions = result?.items || []
 
     // Sort by last activity (most recent first)
     allSessions.sort(
-      (a, b) => new Date(b.lastActivity || b.updatedAt).getTime() - new Date(a.lastActivity || a.updatedAt).getTime()
+      (a, b) =>
+        new Date(b.value.lastActivity || b.value.updatedAt).getTime() -
+        new Date(a.value.lastActivity || a.value.updatedAt).getTime()
     )
 
-    res.json(allSessions)
+    res.json(allSessions.map((item) => item.value))
   } catch (error) {
     console.error('Error listing sessions:', error)
     res.status(500).json({ error: 'Failed to list sessions' })
@@ -80,7 +77,7 @@ sessionRouter.get('/', authMiddleware('read'), async (_req, res) => {
 sessionRouter.delete('/:sessionKey', authMiddleware('write'), async (req, res) => {
   try {
     const { sessionKey } = req.params
-    await sessions.remove(sessionKey)
+    await data.remove(`sessions:${sessionKey}`)
     res.json({ success: true })
   } catch (error) {
     console.error('Error deleting session:', error)
