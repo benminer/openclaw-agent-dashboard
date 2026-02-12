@@ -32,9 +32,9 @@ app.use('/api', authMiddleware('write'), activityWriteRoutes)
 app.use('/api', authMiddleware('write'), cronWriteRoutes)
 
 // New feature routes (session, memory, health)
-app.use('/api/session', sessionRouter)
-app.use('/api/memory', memoryRouter)
-app.use('/api/health', healthRouter)
+app.use('/api/session', sameOriginOrAuth, sessionRouter)
+app.use('/api/memory', sameOriginOrAuth, memoryRouter)
+app.use('/api/health', sameOriginOrAuth, healthRouter)
 
 // SPA fallback -- serve index.html for non-API routes so React Router works
 // Uses Ampt's readStaticFile since static assets aren't on disk in the usual way

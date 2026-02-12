@@ -5,7 +5,7 @@ import { authMiddleware } from '@/middleware/auth'
 export const healthRouter = express.Router()
 
 // POST /api/health/system - Store system health metrics
-healthRouter.post('/system', authMiddleware('write'), async (req, res) => {
+healthRouter.post('/system', async (req, res) => {
   try {
     const { hostname, platform, arch, nodeVersion, openclawVersion, uptime, memory, cpu, disk, services } = req.body
 
@@ -37,7 +37,7 @@ healthRouter.post('/system', authMiddleware('write'), async (req, res) => {
 })
 
 // GET /api/health/system/:hostname - Get system health
-healthRouter.get('/system/:hostname', authMiddleware('read'), async (req, res) => {
+healthRouter.get('/system/:hostname', async (req, res) => {
   try {
     const { hostname } = req.params
     const metrics = await data.get(`health:system:${hostname}`)
@@ -54,7 +54,7 @@ healthRouter.get('/system/:hostname', authMiddleware('read'), async (req, res) =
 })
 
 // GET /api/health/systems - List all system health metrics
-healthRouter.get('/systems', authMiddleware('read'), async (_req, res) => {
+healthRouter.get('/systems', async (_req, res) => {
   try {
     const result = await data.get('health:system:*')
     const systems = result?.items || []

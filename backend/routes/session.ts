@@ -5,7 +5,7 @@ import { authMiddleware } from '@/middleware/auth'
 export const sessionRouter = express.Router()
 
 // POST /api/session - Store session status
-sessionRouter.post('/', authMiddleware('write'), async (req, res) => {
+sessionRouter.post('/', async (req, res) => {
   try {
     const { sessionKey, agent, model, thinking, tokenUsage, costUsd, uptime, runtime, channel, lastActivity } = req.body
 
@@ -37,7 +37,7 @@ sessionRouter.post('/', authMiddleware('write'), async (req, res) => {
 })
 
 // GET /api/session/:sessionKey - Get session status
-sessionRouter.get('/:sessionKey', authMiddleware('read'), async (req, res) => {
+sessionRouter.get('/:sessionKey', async (req, res) => {
   try {
     const { sessionKey } = req.params
     const sessionData = await data.get(`sessions:${sessionKey}`)
@@ -54,7 +54,7 @@ sessionRouter.get('/:sessionKey', authMiddleware('read'), async (req, res) => {
 })
 
 // GET /api/sessions - List all sessions
-sessionRouter.get('/', authMiddleware('read'), async (_req, res) => {
+sessionRouter.get('/', async (_req, res) => {
   try {
     const result = await data.get('sessions:*')
     const allSessions = result?.items || []
@@ -74,7 +74,7 @@ sessionRouter.get('/', authMiddleware('read'), async (_req, res) => {
 })
 
 // DELETE /api/session/:sessionKey - Delete session
-sessionRouter.delete('/:sessionKey', authMiddleware('write'), async (req, res) => {
+sessionRouter.delete('/:sessionKey', async (req, res) => {
   try {
     const { sessionKey } = req.params
     await data.remove(`sessions:${sessionKey}`)

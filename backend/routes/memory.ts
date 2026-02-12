@@ -7,7 +7,7 @@ export const memoryRouter = express.Router()
 const memoryStorage = storage('memory')
 
 // POST /api/memory - Upload memory file
-memoryRouter.post('/', authMiddleware('write'), async (req, res) => {
+memoryRouter.post('/', async (req, res) => {
   try {
     const { path, content, metadata } = req.body
 
@@ -30,7 +30,7 @@ memoryRouter.post('/', authMiddleware('write'), async (req, res) => {
 })
 
 // GET /api/memory - List memory files
-memoryRouter.get('/', authMiddleware('read'), async (_req, res) => {
+memoryRouter.get('/', async (_req, res) => {
   try {
     const files = []
 
@@ -61,7 +61,7 @@ memoryRouter.get('/', authMiddleware('read'), async (_req, res) => {
 })
 
 // GET /api/memory/:filepath+ - Get memory file content (supports nested paths)
-memoryRouter.get('/*filepath', authMiddleware('read'), async (req, res) => {
+memoryRouter.get('/*filepath', async (req, res) => {
   try {
     // filepath+ captures all segments as an array, join them back
     const path = Array.isArray(req.params.filepath) ? req.params.filepath.join('/') : req.params.filepath
@@ -90,7 +90,7 @@ memoryRouter.get('/*filepath', authMiddleware('read'), async (req, res) => {
 })
 
 // DELETE /api/memory/:filepath+ - Delete memory file (supports nested paths)
-memoryRouter.delete('/*filepath', authMiddleware('write'), async (req, res) => {
+memoryRouter.delete('/*filepath', async (req, res) => {
   try {
     // filepath+ captures all segments as an array, join them back
     const path = Array.isArray(req.params.filepath) ? req.params.filepath.join('/') : req.params.filepath
