@@ -1,6 +1,5 @@
 import { storage } from '@ampt/sdk'
 import express from 'express'
-import { authMiddleware } from '@/middleware/auth'
 
 export const memoryRouter = express.Router()
 

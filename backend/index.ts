@@ -19,6 +19,11 @@ app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
 })
 
+// New feature routes FIRST (most specific)
+app.use('/api/session', sameOriginOrAuth, sessionRouter)
+app.use('/api/memory', sameOriginOrAuth, memoryRouter)
+app.use('/api/health', sameOriginOrAuth, healthRouter)
+
 // Read routes -- same-origin (frontend) or API key
 app.use('/api', sameOriginOrAuth, readRoutes)
 app.use('/api', sameOriginOrAuth, blogReadRoutes)
@@ -30,11 +35,6 @@ app.use('/api', authMiddleware('write'), writeRoutes)
 app.use('/api', authMiddleware('write'), blogWriteRoutes)
 app.use('/api', authMiddleware('write'), activityWriteRoutes)
 app.use('/api', authMiddleware('write'), cronWriteRoutes)
-
-// New feature routes (session, memory, health)
-app.use('/api/session', sameOriginOrAuth, sessionRouter)
-app.use('/api/memory', sameOriginOrAuth, memoryRouter)
-app.use('/api/health', sameOriginOrAuth, healthRouter)
 
 // SPA fallback -- serve index.html for non-API routes so React Router works
 // Uses Ampt's readStaticFile since static assets aren't on disk in the usual way

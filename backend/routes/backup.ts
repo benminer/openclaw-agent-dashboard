@@ -117,8 +117,8 @@ const pruneOldBackups = async (label: string, maxKeep: number) => {
 
 writeRoutes.post('/backup', async (req, res) => {
   const label = (req.query.label as string) || 'default'
-  const fileCount = req.query.fileCount ? Number(req.query.fileCount) : 0
-  const totalSize = req.query.totalSize ? Number(req.query.totalSize) : 0
+  const _fileCount = req.query.fileCount ? Number(req.query.fileCount) : 0
+  const _totalSize = req.query.totalSize ? Number(req.query.totalSize) : 0
   const maxKeep = req.query.maxKeep ? Number(req.query.maxKeep) : DEFAULT_MAX_BACKUPS
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
   const key = `/${label}/${timestamp}.tar.gz`
