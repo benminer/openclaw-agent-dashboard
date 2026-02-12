@@ -4,7 +4,7 @@ import type { NextFunction, Request, RequestHandler, Response } from 'express'
 export function authMiddleware(_mode: 'read' | 'write'): RequestHandler {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const apiKey = await params('BACKUP_API_KEY')
+      const apiKey = params('BACKUP_API_KEY')
       const header = req.headers.authorization
 
       if (!header || !header.startsWith('Bearer ') || header.slice(7) !== apiKey) {
@@ -32,7 +32,7 @@ export const sameOriginOrAuth: RequestHandler = async (req: Request, res: Respon
     }
 
     // Otherwise require API key
-    const apiKey = await params('BACKUP_API_KEY')
+    const apiKey = params('BACKUP_API_KEY')
     const header = req.headers.authorization
 
     if (header?.startsWith('Bearer ') && header.slice(7) === apiKey) {
