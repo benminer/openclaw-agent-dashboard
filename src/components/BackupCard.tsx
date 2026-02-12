@@ -61,18 +61,10 @@ export function BackupCard({ backup, onDeleted }: Props) {
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-violet-500/15 text-violet-300 border border-violet-500/20">
               {backup.label}
             </span>
-            {fileCount && (
-              <span className="text-xs text-gray-500 font-mono">
-                {fileCount} files
-              </span>
-            )}
+            {fileCount && <span className="text-xs text-gray-500 font-mono">{fileCount} files</span>}
           </div>
-          <p className="text-sm font-mono text-gray-400">
-            {formatDate(backup.lastModified)}
-          </p>
-          <p className="text-xs text-gray-600 mt-0.5">
-            {timeAgo(backup.lastModified)}
-          </p>
+          <p className="text-sm font-mono text-gray-400">{formatDate(backup.lastModified)}</p>
+          <p className="text-xs text-gray-600 mt-0.5">{timeAgo(backup.lastModified)}</p>
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
@@ -87,8 +79,20 @@ export function BackupCard({ backup, onDeleted }: Props) {
             className="p-2 rounded-lg text-gray-500 hover:text-blue-400 hover:bg-blue-500/10 disabled:opacity-50 transition-colors"
             title="Download"
           >
-            <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            <svg
+              role="img"
+              aria-label="Download icon"
+              className="w-4.5 h-4.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
             </svg>
           </button>
 
@@ -103,16 +107,26 @@ export function BackupCard({ backup, onDeleted }: Props) {
             }`}
             title={confirmDelete ? 'Click again to confirm' : 'Delete'}
           >
-            <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            <svg
+              role="img"
+              aria-label="Delete icon"
+              className="w-4.5 h-4.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
             </svg>
           </button>
         </div>
       </div>
 
-      {error && (
-        <p className="mt-2 text-xs text-red-400 font-mono">{error}</p>
-      )}
+      {error && <p className="mt-2 text-xs text-red-400 font-mono">{error}</p>}
     </div>
   )
 }

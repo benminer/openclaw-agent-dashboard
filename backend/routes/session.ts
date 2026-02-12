@@ -1,0 +1,89 @@
+import { data } from '@ampt/sdk'
+import express from 'express'
+import { authMiddleware } from '@/middleware/auth'
+
+export const sessionRouter = express.Router()
+
+const sessions = data('sessions')
+
+// POST /api/session - Store session status
+sessionRouter.post('/', authMiddleware('write'), async (req, res) => {
+  try {
+    const { sessionKey, agent, model, thinking, tokenUsage, costUsd, uptime, runtime, channel, lastActivity } = req.body
+
+    if (!sessionKey) {
+      return res.status(400).json({ error: 'sessionKey required' })
+    }
+
+    const sessionData = {
+      sessionKey,
+      agent,
+      model,
+      thinking,
+      tokenUsage: tokenUsage || {},
+      costUsd: costUsd || 0,
+      uptime: uptime || 0,
+      runtime: runtime || {},
+      channel: channel || 'unknown',
+      lastActivity: lastActivity || new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }
+
+    await sessions.set(sessionKey, sessionData)
+
+    res.json({ success: true, session: sessionData })
+  } catch (error) {
+    console.error('Error storing session:', error)
+    res.status(500).json({ error: 'Failed to store session data' })
+  }
+})
+
+// GET /api/session/:sessionKey - Get session status
+sessionRouter.get('/:sessionKey', authMiddleware('read'), async (req, res) => {
+  try {
+    const { sessionKey } = req.params
+    const sessionData = await sessions.get(sessionKey)
+
+    if (!sessionData) {
+      return res.status(404).json({ error: 'Session not found' })
+    }
+
+    res.json(sessionData)
+  } catch (error) {
+    console.error('Error fetching session:', error)
+    res.status(500).json({ error: 'Failed to fetch session data' })
+  }
+})
+
+// GET /api/sessions - List all sessions
+sessionRouter.get('/', authMiddleware('read'), async (_req, res) => {
+  try {
+    const allSessions = []
+
+    for await (const { value } of sessions.scan()) {
+      allSessions.push(value)
+    }
+
+    // Sort by last activity (most recent first)
+    allSessions.sort(
+      (a, b) => new Date(b.lastActivity || b.updatedAt).getTime() - new Date(a.lastActivity || a.updatedAt).getTime()
+    )
+
+    res.json(allSessions)
+  } catch (error) {
+    console.error('Error listing sessions:', error)
+    res.status(500).json({ error: 'Failed to list sessions' })
+  }
+})
+
+// DELETE /api/session/:sessionKey - Delete session
+sessionRouter.delete('/:sessionKey', authMiddleware('write'), async (req, res) => {
+  try {
+    const { sessionKey } = req.params
+    await sessions.remove(sessionKey)
+    res.json({ success: true })
+  } catch (error) {
+    console.error('Error deleting session:', error)
+    res.status(500).json({ error: 'Failed to delete session' })
+  }
+})

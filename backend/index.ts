@@ -6,6 +6,9 @@ import { activityReadRoutes, activityWriteRoutes } from '@/routes/activity'
 import { readRoutes, writeRoutes } from '@/routes/backup'
 import { blogReadRoutes, blogWriteRoutes } from '@/routes/blog'
 import { cronReadRoutes, cronWriteRoutes } from '@/routes/cron'
+import { healthRouter } from '@/routes/health'
+import { memoryRouter } from '@/routes/memory'
+import { sessionRouter } from '@/routes/session'
 
 const app = express()
 
@@ -28,9 +31,14 @@ app.use('/api', authMiddleware, blogWriteRoutes)
 app.use('/api', authMiddleware, activityWriteRoutes)
 app.use('/api', authMiddleware, cronWriteRoutes)
 
+// New feature routes (session, memory, health)
+app.use('/api/session', sessionRouter)
+app.use('/api/memory', memoryRouter)
+app.use('/api/health', healthRouter)
+
 // SPA fallback -- serve index.html for non-API routes so React Router works
 // Uses Ampt's readStaticFile since static assets aren't on disk in the usual way
-app.use(async (req, res) => {
+app.use(async (_req, res) => {
   res.status(200).set('Content-Type', 'text/html')
   const stream = await http.node.readStaticFile('index.html')
   return stream.pipe(res)

@@ -24,14 +24,13 @@ export function SettingsModal({ onClose }: Props) {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in">
       <div className="bg-gray-900 border border-gray-700/50 rounded-xl p-6 w-full max-w-md shadow-2xl">
         <h2 className="text-lg font-semibold text-gray-100 mb-1">Settings</h2>
-        <p className="text-sm text-gray-500 mb-5">
-          API key is required for write operations (delete, upload).
-        </p>
+        <p className="text-sm text-gray-500 mb-5">API key is required for write operations (delete, upload).</p>
 
-        <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">
+        <label htmlFor="api-key" className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">
           API Key
         </label>
         <input
+          id="api-key"
           type="password"
           value={apiKey}
           onChange={(e) => setApiKey(e.target.value)}

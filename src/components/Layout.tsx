@@ -36,9 +36,13 @@ export function Layout() {
             <div className="flex items-center gap-1">
               <nav className="flex items-center gap-0.5 sm:gap-1">
                 <NavLink to="/" label="Dashboard" shortLabel="Home" />
+                <NavLink to="/sessions" label="Sessions" shortLabel="Sess" />
+                <NavLink to="/memory" label="Memory" shortLabel="Mem" />
+                <NavLink to="/health" label="Health" shortLabel="HP" />
                 <NavLink to="/activity" label="Activity" shortLabel="Feed" />
                 <NavLink to="/calendar" label="Calendar" shortLabel="Cal" />
                 <NavLink to="/blog" label="Blog" />
+                <NavLink to="/profile" label="Profile" shortLabel="Eva" />
               </nav>
               <button
                 type="button"

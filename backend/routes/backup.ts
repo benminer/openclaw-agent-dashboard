@@ -37,7 +37,7 @@ readRoutes.get('/backups', async (req, res) => {
   res.json({ backups: results })
 })
 
-readRoutes.get('/stats', async (req, res) => {
+readRoutes.get('/stats', async (_req, res) => {
   const pages = await backups.list('/', { recursive: true })
   let totalBackups = 0
   let totalSize = 0
