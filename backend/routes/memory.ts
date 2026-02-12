@@ -60,10 +60,11 @@ memoryRouter.get('/', authMiddleware('read'), async (_req, res) => {
   }
 })
 
-// GET /api/memory/:path* - Get memory file content
-memoryRouter.get('/:path*', authMiddleware('read'), async (req, res) => {
+// GET /api/memory/* - Get memory file content
+memoryRouter.get('/*', authMiddleware('read'), async (req, res) => {
   try {
-    const path = req.params.path as string
+    // Remove leading slash from req.path (which is relative to /api/memory)
+    const path = req.path.slice(1)
 
     const content = await memoryStorage.read(path)
     const stat = await memoryStorage.stat(path)
@@ -88,10 +89,11 @@ memoryRouter.get('/:path*', authMiddleware('read'), async (req, res) => {
   }
 })
 
-// DELETE /api/memory/:path* - Delete memory file
-memoryRouter.delete('/:path*', authMiddleware('write'), async (req, res) => {
+// DELETE /api/memory/* - Delete memory file
+memoryRouter.delete('/*', authMiddleware('write'), async (req, res) => {
   try {
-    const path = req.params.path as string
+    // Remove leading slash from req.path (which is relative to /api/memory)
+    const path = req.path.slice(1)
     await memoryStorage.remove(path)
     res.json({ success: true })
   } catch (error) {
