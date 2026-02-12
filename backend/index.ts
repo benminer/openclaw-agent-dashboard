@@ -26,10 +26,10 @@ app.use('/api', sameOriginOrAuth, activityReadRoutes)
 app.use('/api', sameOriginOrAuth, cronReadRoutes)
 
 // Write routes -- always require API key
-app.use('/api', authMiddleware, writeRoutes)
-app.use('/api', authMiddleware, blogWriteRoutes)
-app.use('/api', authMiddleware, activityWriteRoutes)
-app.use('/api', authMiddleware, cronWriteRoutes)
+app.use('/api', authMiddleware('write'), writeRoutes)
+app.use('/api', authMiddleware('write'), blogWriteRoutes)
+app.use('/api', authMiddleware('write'), activityWriteRoutes)
+app.use('/api', authMiddleware('write'), cronWriteRoutes)
 
 // New feature routes (session, memory, health)
 app.use('/api/session', sessionRouter)
