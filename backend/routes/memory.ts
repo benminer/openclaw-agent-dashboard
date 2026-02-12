@@ -60,11 +60,11 @@ memoryRouter.get('/', authMiddleware('read'), async (_req, res) => {
   }
 })
 
-// GET /api/memory/* - Get memory file content
-memoryRouter.get('/*', authMiddleware('read'), async (req, res) => {
+// GET /api/memory/:filepath+ - Get memory file content (supports nested paths)
+memoryRouter.get('/:filepath+', authMiddleware('read'), async (req, res) => {
   try {
-    // Remove leading slash from req.path (which is relative to /api/memory)
-    const path = req.path.slice(1)
+    // filepath+ captures all segments as an array, join them back
+    const path = Array.isArray(req.params.filepath) ? req.params.filepath.join('/') : req.params.filepath
 
     const content = await memoryStorage.read(path)
     const stat = await memoryStorage.stat(path)
@@ -89,11 +89,11 @@ memoryRouter.get('/*', authMiddleware('read'), async (req, res) => {
   }
 })
 
-// DELETE /api/memory/* - Delete memory file
-memoryRouter.delete('/*', authMiddleware('write'), async (req, res) => {
+// DELETE /api/memory/:filepath+ - Delete memory file (supports nested paths)
+memoryRouter.delete('/:filepath+', authMiddleware('write'), async (req, res) => {
   try {
-    // Remove leading slash from req.path (which is relative to /api/memory)
-    const path = req.path.slice(1)
+    // filepath+ captures all segments as an array, join them back
+    const path = Array.isArray(req.params.filepath) ? req.params.filepath.join('/') : req.params.filepath
     await memoryStorage.remove(path)
     res.json({ success: true })
   } catch (error) {
