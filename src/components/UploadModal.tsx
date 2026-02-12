@@ -40,16 +40,18 @@ export function UploadModal({ onClose, onUploaded }: Props) {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in">
       <div className="bg-gray-900 border border-gray-700/50 rounded-xl p-6 w-full max-w-md shadow-2xl">
         <h2 className="text-lg font-semibold text-gray-100 mb-1">Upload Backup</h2>
-        <p className="text-sm text-gray-500 mb-5">
-          Upload a .tar.gz backup archive to storage.
-        </p>
+        <p className="text-sm text-gray-500 mb-5">Upload a .tar.gz backup archive to storage.</p>
 
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">
+            <label
+              htmlFor="backup-label"
+              className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2"
+            >
               Label
             </label>
             <input
+              id="backup-label"
               type="text"
               value={label}
               onChange={(e) => setLabel(e.target.value)}
@@ -58,10 +60,14 @@ export function UploadModal({ onClose, onUploaded }: Props) {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">
+            <label
+              htmlFor="archive-file"
+              className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2"
+            >
               Archive File
             </label>
             <input
+              id="archive-file"
               ref={inputRef}
               type="file"
               accept=".tar.gz,.tgz"
@@ -82,13 +88,9 @@ export function UploadModal({ onClose, onUploaded }: Props) {
           </div>
         </div>
 
-        {progress && !error && (
-          <p className="mt-4 text-sm text-violet-400 font-mono">{progress}</p>
-        )}
+        {progress && !error && <p className="mt-4 text-sm text-violet-400 font-mono">{progress}</p>}
 
-        {error && (
-          <p className="mt-4 text-sm text-red-400 font-mono">{error}</p>
-        )}
+        {error && <p className="mt-4 text-sm text-red-400 font-mono">{error}</p>}
 
         <div className="flex justify-end gap-3 mt-6">
           <button

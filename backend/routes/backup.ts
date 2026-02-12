@@ -37,7 +37,7 @@ readRoutes.get('/backups', async (req, res) => {
   res.json({ backups: results })
 })
 
-readRoutes.get('/stats', async (req, res) => {
+readRoutes.get('/stats', async (_req, res) => {
   const pages = await backups.list('/', { recursive: true })
   let totalBackups = 0
   let totalSize = 0
@@ -55,7 +55,7 @@ readRoutes.get('/stats', async (req, res) => {
       totalSize += stat.size || 0
       labels.add(item.replace(/^\//, '').split('/')[0])
 
-      const modified = new Date(stat.lastModified)
+      const modified = new Date(stat.lastModified ?? 0)
       if (!latestDate || modified > latestDate) {
         latestDate = modified
         latestBackup = item
@@ -101,7 +101,7 @@ const pruneOldBackups = async (label: string, maxKeep: number) => {
     for (const item of page) {
       if (!item.endsWith('.tar.gz')) continue
       const stat = await backups.stat(item)
-      if (stat) items.push({ key: item, lastModified: new Date(stat.lastModified) })
+      if (stat) items.push({ key: item, lastModified: new Date(stat.lastModified ?? 0) })
     }
   }
 
@@ -123,15 +123,7 @@ writeRoutes.post('/backup', async (req, res) => {
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
   const key = `/${label}/${timestamp}.tar.gz`
 
-  const uploadUrl = await backups.getUploadUrl(key, {
-    metadata: {
-      label,
-      createdAt: new Date().toISOString(),
-      fileCount: String(fileCount),
-      totalSize: String(totalSize)
-    },
-    type: 'application/gzip'
-  })
+  const uploadUrl = await backups.getUploadUrl(key)
 
   // Auto-prune old backups after creating a new one
   const pruned = await pruneOldBackups(label, maxKeep)
