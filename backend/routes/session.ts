@@ -1,4 +1,4 @@
-import { data } from '@ampt/sdk'
+import { data } from '@ampt/data'
 import express from 'express'
 import { authMiddleware } from '@/middleware/auth'
 

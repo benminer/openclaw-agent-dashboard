@@ -24,6 +24,7 @@
     "ampt:build": "vite build",
     "lint": "biome check backend src",
     "lint:fix": "biome check --fix backend src",
+    "typecheck": "tsc --noEmit -p backend/tsconfig.json && tsc --noEmit -p tsconfig.app.json",
     "prepare": "husky"
   },
   "lint-staged": {
