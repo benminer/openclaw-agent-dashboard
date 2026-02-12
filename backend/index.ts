@@ -41,6 +41,9 @@ app.use('/api/health', healthRouter)
 app.use(async (_req, res) => {
   res.status(200).set('Content-Type', 'text/html')
   const stream = await http.node.readStaticFile('index.html')
+  if (!stream) {
+    return res.status(500).send('Failed to load index.html')
+  }
   return stream.pipe(res)
 })
 

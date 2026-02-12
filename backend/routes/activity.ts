@@ -29,10 +29,10 @@ activityReadRoutes.get('/activity/events', async (req, res) => {
 
     if (type) {
       const result = await data.getByLabel('label1', `${PREFIX}-type:${type}`, { limit })
-      items = (result.items || []).map((item: { value: ActivityEvent }) => item.value)
+      items = (result.items || []).map((item) => item.value as ActivityEvent)
     } else {
       const result = await data.get(`${PREFIX}:*`, { limit })
-      items = (result.items || []).map((item: { value: ActivityEvent }) => item.value)
+      items = (result.items || []).map((item) => item.value as ActivityEvent)
     }
 
     // Filter by before timestamp if provided

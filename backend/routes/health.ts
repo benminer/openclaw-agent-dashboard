@@ -60,7 +60,9 @@ healthRouter.get('/systems', authMiddleware('read'), async (_req, res) => {
     const systems = result?.items || []
 
     // Sort by last update (most recent first)
-    systems.sort((a, b) => new Date(b.value.updatedAt).getTime() - new Date(a.value.updatedAt).getTime())
+    systems.sort(
+      (a, b) => new Date((b.value as any).updatedAt).getTime() - new Date((a.value as any).updatedAt).getTime()
+    )
 
     res.json(systems.map((item) => item.value))
   } catch (error) {

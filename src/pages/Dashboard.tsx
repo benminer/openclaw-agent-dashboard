@@ -12,7 +12,7 @@ export function Dashboard() {
   const [error, setError] = useState<string | null>(null)
   const [showUpload, setShowUpload] = useState(false)
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date())
-  const intervalRef = useRef<ReturnType<typeof setInterval>>()
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const load = useCallback(async (silent = false) => {
     try {
@@ -32,7 +32,9 @@ export function Dashboard() {
   useEffect(() => {
     load()
     intervalRef.current = setInterval(() => load(true), 30000)
-    return () => clearInterval(intervalRef.current)
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+    }
   }, [load])
 
   const refresh = () => {

@@ -62,8 +62,8 @@ sessionRouter.get('/', authMiddleware('read'), async (_req, res) => {
     // Sort by last activity (most recent first)
     allSessions.sort(
       (a, b) =>
-        new Date(b.value.lastActivity || b.value.updatedAt).getTime() -
-        new Date(a.value.lastActivity || a.value.updatedAt).getTime()
+        new Date((b.value as any).lastActivity || (b.value as any).updatedAt).getTime() -
+        new Date((a.value as any).lastActivity || (a.value as any).updatedAt).getTime()
     )
 
     res.json(allSessions.map((item) => item.value))
